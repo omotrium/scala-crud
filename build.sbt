@@ -15,6 +15,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala).settings(
     "com.typesafe.play" %% "play-slick" % "5.0.0",
     "com.typesafe.play" %% "play-slick-evolutions" % "5.0.0",
     "com.h2database" % "h2" % "2.2.224",
+    "commons-validator" % "commons-validator" % "1.7",
+    "org.typelevel" %% "cats-core" % "2.10.0"
 
 ),
   dependencyOverrides += "org.scala-lang.modules" % "scala-xml_2.13" % "2.2.0"
