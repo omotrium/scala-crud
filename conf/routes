@@ -10,11 +10,11 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 
 # Profile routes
 
-POST    /api/profiles            controllers.ProfileController.createProfile()
-GET     /api/profiles            controllers.ProfileController.getAllProfiles()
-GET     /api/profiles/:id        controllers.ProfileController.getProfile(id: Long)
-PUT     /api/profiles/:id        controllers.ProfileController.updateProfile(id: Long)
-DELETE  /api/profiles/:id        controllers.ProfileController.deleteProfile(id: Long)
+POST    /api/profiles            controllers.CreateProfileController.createProfile()
+GET     /api/profiles            controllers.GetProfileController.getAllProfiles()
+GET     /api/profiles/:id        controllers.GetProfileController.getProfile(id: Long)
+PUT     /api/profiles/:id        controllers.UpdateProfileController.updateProfile(id: Long)
+DELETE  /api/profiles/:id        controllers.DeleteProfileController.deleteProfile(id: Long)
 
 
 GET   /@evolutions              controllers.ApplicationEvolutions.showEvolutions

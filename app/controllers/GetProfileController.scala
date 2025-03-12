@@ -1,3 +1,4 @@
+
 package controllers
 
 
@@ -15,7 +16,7 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ProfileController @Inject() (
+class GetProfileController @Inject() (
                                     protected val dbConfigProvider: DatabaseConfigProvider,
                                     override val uuidService: UuidService,
                                     cc: ControllerComponents,
@@ -108,4 +109,5 @@ class ProfileController @Inject() (
 
 
 }
+
 
