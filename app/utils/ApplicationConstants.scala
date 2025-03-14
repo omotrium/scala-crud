@@ -12,5 +12,7 @@ object ApplicationConstants {
     val InvalidOrMissingAccept             =
     "Accept was missing from Header or is in the wrong format"
    val InvalidOrMissingNameCode                                 = "006"
-
+  val InvalidOrMissingEmail                                 =
+    "Mandatory field email was missing from body or is in the wrong format"
+  val InvalidOrMissingEmailCode                                 = "007"
 }

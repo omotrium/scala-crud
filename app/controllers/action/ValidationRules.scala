@@ -1,7 +1,9 @@
-
 package controllers.action
 
-import controllers.action.ValidationRules.{BadRequestErrorResponse, extractSimplePaths}
+import controllers.action.ValidationRules.{
+  BadRequestErrorResponse,
+  extractSimplePaths
+}
 import org.apache.commons.validator.routines.EmailValidator
 import play.api.libs.functional.syntax.toApplicativeOps
 import play.api.libs.json.Json.toJson
@@ -23,9 +25,10 @@ trait ValidationRules {
 
   implicit def ec: ExecutionContext
 
-
-  protected def validateAcceptHeader(implicit request: Request[_]): Either[Result, String] = {
-    val pattern = """^application/vnd[.]{1}hmrc[.]{1}1{1}[.]0[+]{1}json$""".r
+  protected def validateAcceptHeader(implicit
+      request: Request[_]
+  ): Either[Result, String] = {
+    val pattern = """^application/json$""".r
     request.headers
       .get(HeaderNames.Accept)
       .filter(pattern.matches(_))
@@ -37,10 +40,8 @@ trait ValidationRules {
       )
   }
 
-
-
   protected def validateRequestBody[A: Reads](
-    fieldToErrorCodeTable: Map[String, (String, String)]
+      fieldToErrorCodeTable: Map[String, (String, String)]
   )(implicit request: Request[JsValue]): Either[Result, A] =
     request.body
       .validate[A]
@@ -53,22 +54,23 @@ trait ValidationRules {
         ).asPresentation
       )
 
-
-
-
-
   private def convertError(
-    errors: scala.collection.Seq[(JsPath, scala.collection.Seq[JsonValidationError])],
-    fieldToErrorCodeTable: Map[String, (String, String)]
+      errors: scala.collection.Seq[
+        (JsPath, scala.collection.Seq[JsonValidationError])
+      ],
+      fieldToErrorCodeTable: Map[String, (String, String)]
   ): Seq[Error] =
     extractSimplePaths(errors)
-      .map(key => fieldToErrorCodeTable.get(key).map(res => Error.invalidRequestParameterError(res._2, res._1.toInt)))
+      .map(key =>
+        fieldToErrorCodeTable
+          .get(key)
+          .map(res => Error.invalidRequestParameterError(res._2, res._1.toInt))
+      )
       .toSeq
       .flatten
 }
 
 object ValidationRules {
-
 
   private val emailValidator: EmailValidator = EmailValidator.getInstance(true)
 
@@ -76,15 +78,17 @@ object ValidationRules {
     def lengthBetween(min: Int, max: Int): Reads[String] =
       minLength[String](min).keepAnd(maxLength[String](max))
 
-
     val validEmailAddress: Reads[String] = verifying(isValidEmailAddress)
 
   }
 
-  def isValidEmailAddress(emailAddress: String): Boolean = emailValidator.isValid(emailAddress)
+  def isValidEmailAddress(emailAddress: String): Boolean =
+    emailValidator.isValid(emailAddress)
 
   private def extractSimplePaths(
-    errors: scala.collection.Seq[(JsPath, collection.Seq[JsonValidationError])]
+      errors: scala.collection.Seq[
+        (JsPath, collection.Seq[JsonValidationError])
+      ]
   ): collection.Seq[String] =
     errors
       .map(_._1)
@@ -92,10 +96,14 @@ object ValidationRules {
       .map(_.mkString)
 
   val fieldsToErrorCode: Map[String, (String, String)] = Map(
-    "/name"                                       -> (InvalidOrMissingNameCode, InvalidOrMissingName)
+    "/name" -> (InvalidOrMissingNameCode, InvalidOrMissingName),
+    "/email" -> (InvalidOrMissingEmailCode, InvalidOrMissingEmail)
   )
 
-  case class BadRequestErrorResponse(correlationId: String, errors: Seq[Error]) {
+  case class BadRequestErrorResponse(
+      correlationId: String,
+      errors: Seq[Error]
+  ) {
     def asPresentation: Result =
       BadRequest(
         toJson(
@@ -110,6 +118,7 @@ object ValidationRules {
   }
 
   object BadRequestErrorResponse {
-    implicit val format: OFormat[BadRequestErrorResponse] = Json.format[BadRequestErrorResponse]
+    implicit val format: OFormat[BadRequestErrorResponse] =
+      Json.format[BadRequestErrorResponse]
   }
 }

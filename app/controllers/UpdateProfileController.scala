@@ -39,16 +39,6 @@ class UpdateProfileController @Inject() (
     }.getOrElse(Future.successful(BadRequest("Invalid JSON")))
   }
 
-  def deleteProfile(id: Long): Action[AnyContent] = Action.async {
-    val deleteAction = ProfileTable.profiles.filter(_.id === id).delete
-    val actionResult = dbConfig.db.run(deleteAction)
-    actionResult.map {
-      case 0 => NotFound
-      case _ => NoContent
-    }
-  }
-
-
 }
 
 
